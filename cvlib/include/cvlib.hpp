@@ -8,6 +8,7 @@
 #define __CVLIB_HPP__
 
 #include <opencv2/opencv.hpp>
+#include <deque>
 
 namespace cvlib
 {
@@ -28,8 +29,12 @@ cv::Mat select_texture(const cv::Mat& image, const cv::Rect& roi, double eps);
 class motion_segmentation : public cv::BackgroundSubtractor
 {
     public:
+    size_t frame_counter = 0;
+    std::deque<cv::Mat> frames;
+    int threshold = 0;
+    
     /// \brief ctor
-    motion_segmentation();
+    motion_segmentation() {};
 
     /// \see cv::BackgroundSubtractor::apply
     void apply(cv::InputArray image, cv::OutputArray fgmask, double learningRate = -1) override;
@@ -39,10 +44,16 @@ class motion_segmentation : public cv::BackgroundSubtractor
     {
         backgroundImage.assign(bg_model_);
     }
+    
+    void TackbarCallback(int varThreshold)
+    {
+    	threshold = varThreshold;
+    } 
 
     private:
     cv::Mat bg_model_;
 };
+
 
 /// \brief FAST corner detection algorithm
 class corner_detector_fast : public cv::Feature2D

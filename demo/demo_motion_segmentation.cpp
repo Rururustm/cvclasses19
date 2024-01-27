@@ -9,18 +9,19 @@
 
 int demo_motion_segmentation(int argc, char* argv[])
 {
-    cv::VideoCapture cap(0);
+    cv::VideoCapture cap(0, 200);
     if (!cap.isOpened())
         return -1;
+    
 
-    auto mseg = cv::createBackgroundSubtractorMOG2(); // \todo use cvlib::motion_segmentation
+    auto mseg = cvlib::motion_segmentation(); // \todo use cvlib::motion_segmentation
     const auto main_wnd = "orig";
     const auto demo_wnd = "demo";
 
-    int threshold = 50;
+    int threshold = 200;
     cv::namedWindow(main_wnd);
     cv::namedWindow(demo_wnd);
-    cv::createTrackbar("th", demo_wnd, &threshold, 255);
+    cv::createTrackbar("th", demo_wnd, &threshold, 1000);
 
     cv::Mat frame;
     cv::Mat frame_mseg;
@@ -28,9 +29,12 @@ int demo_motion_segmentation(int argc, char* argv[])
     {
         cap >> frame;
         cv::imshow(main_wnd, frame);
-
-        mseg->setVarThreshold(threshold); // \todo use TackbarCallback
-        mseg->apply(frame, frame_mseg);
+        cv::cvtColor(frame, frame, cv::COLOR_BGR2GRAY);
+        frame.convertTo(frame, CV_32FC1);
+        
+        mseg.TackbarCallback(threshold); // \todo use TackbarCallback
+        mseg.apply(frame, frame_mseg);
+        mseg.getBackgroundImage(frame);
         if (!frame_mseg.empty())
             cv::imshow(demo_wnd, frame_mseg);
     }
