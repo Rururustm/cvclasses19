@@ -34,7 +34,7 @@ void mouse(int event, int x, int y, int flags, void* param)
 
 int demo_select_texture(int argc, char* argv[])
 {
-    cv::VideoCapture cap(0);
+    cv::VideoCapture cap(0, 200);
     if (!cap.isOpened())
         return -1;
 
@@ -43,7 +43,7 @@ int demo_select_texture(int argc, char* argv[])
     data.wnd = "origin";
     const auto demo_wnd = "demo";
 
-    int eps = 50;
+    int eps = 75;
     cv::namedWindow(data.wnd);
     cv::namedWindow(demo_wnd);
     // \todo choose reasonable max value
