@@ -111,8 +111,9 @@ void corner_detector_fast::compute(cv::InputArray input, std::vector<cv::KeyPoin
     }
 } 
 
-void corner_detector_fast::detectAndCompute(cv::InputArray, cv::InputArray, std::vector<cv::KeyPoint>&, cv::OutputArray descriptors, bool /*= false*/)
+void corner_detector_fast::detectAndCompute(cv::InputArray image, cv::InputArray, std::vector<cv::KeyPoint>& keypoints, cv::OutputArray descriptors, bool /*= false*/)
 {
-
+    detect(image, keypoints);
+    compute(image, keypoints, descriptors);
 }
 } // namespace cvlib
