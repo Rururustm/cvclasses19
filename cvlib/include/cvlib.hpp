@@ -116,7 +116,19 @@ class descriptor_matcher : public cv::DescriptorMatcher
 /// \brief Stitcher for merging images into big one
 class Stitcher
 {
-    /// \todo design and implement
+    public:
+    Stitcher();
+
+    ~Stitcher() {}
+
+    virtual void initialize(cv::InputArray input);
+    virtual void stitch(cv::InputArray input, cv::OutputArray dst);
+
+    private:
+    cv::Mat dst;
+
+    cv::Ptr<cv::ORB> detector;
+    cv::Ptr<cv::BFMatcher> matcher;
 };
 } // namespace cvlib
 
